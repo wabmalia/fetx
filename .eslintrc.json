@@ -1,0 +1,86 @@
+{
+    "env": {
+        "browser": true,
+        "es6": true,
+        "jest": true
+    },
+    "extends": [
+        "eslint:recommended",
+        "plugin:import/errors",
+        "plugin:import/warnings"
+    ],
+    "globals": {
+        "global": true
+    },
+    "parserOptions": {
+        "ecmaVersion": 2020,
+        "sourceType": "module"
+    },
+    "plugins": [
+        "import"
+    ],
+    "rules": {
+        "object-curly-spacing": [
+            "error",
+            "always"
+        ],
+        "indent": [
+            "error",
+            4
+        ],
+        "linebreak-style": [
+            "error",
+            "unix"
+        ],
+        "quotes": [
+            "error",
+            "double"
+        ],
+        "semi": [
+            "error",
+            "never"
+        ],
+        "import/no-unresolved": "off",
+        "import/named": "warn",
+        "import/namespace": "warn",
+        "import/no-named-as-default": "off",
+        "import/export": "warn",
+        "import/order": [
+            "error",
+            {
+                "groups": [
+                    "builtin",
+                    "external",
+                    "parent",
+                    "sibling",
+                    "index"
+                ],
+                "newlines-between": "always",
+                "alphabetize": {
+                    "order": "asc",
+                    "caseInsensitive": true
+                }
+            }
+        ]
+    },
+    "overrides": [
+        {
+            "files": [
+                "src/**/*.test.js",
+                "src/**/*.test.jsx"
+            ],
+            "rules": {
+                "no-console": [
+                    "error"
+                ],
+                "no-restricted-globals": [
+                    "error",
+                    "fdescribe",
+                    "fit",
+                    "xdescribe",
+                    "xit"
+                ]
+            }
+        }
+    ]
+}
