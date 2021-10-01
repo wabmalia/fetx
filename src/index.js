@@ -17,8 +17,8 @@ const request = (url) => {
             options.headers = { ...options.headers, ...headers }
             return operations
         },
-        json: () => operations.header("Content-Type", "application/json"),
-        body: (obj) => {
+        withJsonBody: (obj) => {
+            operations.header("Content-Type", "application/json")
             options.body = JSON.stringify(obj)
             return operations
         },

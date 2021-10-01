@@ -40,8 +40,7 @@ it("makes a request with the provided body and marks it as application/json", as
 
     const data =
         await request("hey")
-            .json()
-            .body({ oh: "no" })
+            .withJsonBody({ oh: "no" })
             .post()
 
     expect(window.fetch)
