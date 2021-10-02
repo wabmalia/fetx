@@ -1,11 +1,5 @@
-const request = (url) => {
-    const options = {}
-    const supportedMethods = [
-        "GET", "HEAD", "POST",
-        "PUT", "DELETE", "CONNECT",
-        "OPTIONS", "TRACE", "PATCH"
-    ]
-
+const request = (url, { initialOptions, extraOperations }) => {
+    const options = { ...initialOptions || {} }
     const operations =  {
         header: (key, value) => {
             if(!options.headers) options.headers = {}
@@ -17,18 +11,45 @@ const request = (url) => {
             options.headers = { ...options.headers, ...headers }
             return operations
         },
-        withJsonBody: (obj) => {
-            operations.header("Content-Type", "application/json")
-            options.body = JSON.stringify(obj)
-            return operations
-        },
-        ...supportedMethods
-            .reduce((acc, method) => ({
-                ...acc,
-                [method.toLowerCase()]: () => send(url, { ...options, method })
-            }), {})
+        send: () => send(url, { ...options }),
     }
+    Object.entries(extraOperations || {})
+        .forEach(([key, fn]) => operations[key] = fn(options, operations))
+
     return operations
+}
+
+const bodyOperations = {
+    withJsonBody: (options, operations) => (obj) => {
+        operations.header("Content-Type", "application/json")
+        options.body = JSON.stringify(obj)
+        return operations
+    }
+}
+
+const get = (url) => request(url, {
+    initialOptions: { method: "GET" }
+})
+
+const post = (url) => {
+    return request(url, {
+        initialOptions: { method: "POST" },
+        extraOperations: { ...bodyOperations }
+    })
+}
+
+const put = (url) => {
+    return request(url, {
+        initialOptions: { method: "PUT" },
+        extraOperations: { ...bodyOperations }
+    })
+}
+
+const del = (url) => {
+    return request(url, {
+        initialOptions: { method: "DELETE" },
+        extraOperations: { ...bodyOperations }
+    })
 }
 
 const send = (url, options) => {
@@ -44,4 +65,9 @@ const send = (url, options) => {
         })
 }
 
-export default request
+export default {
+    get,
+    post,
+    put,
+    delete: del
+}

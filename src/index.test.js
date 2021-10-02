@@ -7,7 +7,7 @@ it("makes a request with the provided url", async () => {
         ok: true,
         json: () => Promise.resolve({ some: "thing" })
     })
-    const data = await request("hey").get()
+    const data = await request.get("hey").send()
     expect(window.fetch).toBeCalledWith("hey", { method: "GET" })
     expect(data).toStrictEqual({ some: "thing" })
 })
@@ -17,12 +17,14 @@ it("allows header chaining", async () => {
         ok: true,
         json: () => Promise.resolve({ some: "thing" })
     })
+
     const data =
-        await request("hey")
+        await request
+            .get("hey")
             .header("one", "1")
             .header("two", "2")
             .headers({ three: 3, four: 4 })
-            .get()
+            .send()
 
     expect(window.fetch)
         .toBeCalledWith("hey", {
@@ -39,9 +41,10 @@ it("makes a request with the provided body and marks it as application/json", as
     })
 
     const data =
-        await request("hey")
+        await request
+            .post("hey")
             .withJsonBody({ oh: "no" })
-            .post()
+            .send()
 
     expect(window.fetch)
         .toBeCalledWith("hey", {
@@ -61,31 +64,25 @@ it("throws an error with the status and status text when the request fails", asy
         statusText: "Nahaan"
     })
 
-    const error = await request("hey").get().catch(error => error)
+    const error = await request.get("hey").send().catch(error => error)
 
     expect(window.fetch).toBeCalledWith("hey", { method: "GET" })
     expect(error).toStrictEqual({ status: 400, statusText: "Nahaan" })
 })
 
 describe("supported methods", () => {
-
     it.each([
         ["get", "GET"],
-        ["head", "HEAD"],
         ["post", "POST"],
         ["put", "PUT"],
-        ["delete", "DELETE"],
-        ["connect", "CONNECT"],
-        ["options", "OPTIONS"],
-        ["trace", "TRACE"],
-        ["patch", "PATCH"]
+        ["delete", "DELETE"]
     ])("allows sending a %s request", async(methodFunction, expectedMethodHeader) => {
         window.fetch.mockResolvedValueOnce({
             ok: true,
             json: () => Promise.resolve({ some: "thing" })
         })
 
-        await request("hey")[methodFunction]()
+        await request[methodFunction]("hey").send()
 
         expect(window.fetch)
             .toBeCalledWith("hey", {
