@@ -24,12 +24,13 @@ it("allows header chaining", async () => {
             .header("one", "1")
             .header("two", "2")
             .headers({ three: 3, four: 4 })
+            .bearer("IAMTOKEN")
             .send()
 
     expect(window.fetch)
         .toBeCalledWith("hey", {
             method: "GET",
-            headers: { one: "1", two: "2", three: 3, four: 4 }
+            headers: { one: "1", two: "2", three: 3, four: 4, Authorization: "Bearer IAMTOKEN" }
         })
     expect(data).toStrictEqual({ some: "thing" })
 })

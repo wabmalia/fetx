@@ -11,6 +11,9 @@ const request = (url, { initialOptions, extraOperations }) => {
             options.headers = { ...options.headers, ...headers }
             return operations
         },
+        bearer: (token) => {
+            return operations.header("Authorization", `Bearer ${token}`)
+        },
         send: () => send(url, { ...options }),
     }
     Object.entries(extraOperations || {})
