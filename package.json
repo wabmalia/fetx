@@ -1,9 +1,10 @@
 {
   "name": "fetx",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A wrapper for fetch to make it easier to work with",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
+    "prebuild": "rm -rf dist/",
     "build": "webpack",
     "test": "jest",
     "test:watch": "jest --watch"
