@@ -19,6 +19,7 @@ request
         "CustomHeader": "Something",
         "Cache-Control": "no-cache"
     })
+    .bearer("I.AM.TOKEN")
     .send()
 ```
 
