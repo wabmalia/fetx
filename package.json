@@ -1,7 +1,10 @@
 {
   "name": "fetx",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "A wrapper for fetch to make it easier to work with",
+  "repository": {
+    "url": "https://github.com/wabmalia/fetx"
+  },
   "main": "dist/index.js",
   "scripts": {
     "prebuild": "rm -rf dist/",
