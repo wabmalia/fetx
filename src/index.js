@@ -64,7 +64,7 @@ const send = (url, options) => {
                     statusText: response.statusText
                 }
             }
-            return response.json()
+            return response.bodyUsed ? response.json() : undefined
         })
 }
 

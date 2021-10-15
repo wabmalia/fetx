@@ -5,6 +5,7 @@ window.fetch = jest.fn()
 it("makes a request with the provided url", async () => {
     window.fetch.mockResolvedValueOnce({
         ok: true,
+        bodyUsed: true,
         json: () => Promise.resolve({ some: "thing" })
     })
     const data = await request.get("hey").send()
@@ -15,6 +16,7 @@ it("makes a request with the provided url", async () => {
 it("allows header chaining", async () => {
     window.fetch.mockResolvedValueOnce({
         ok: true,
+        bodyUsed: true,
         json: () => Promise.resolve({ some: "thing" })
     })
 
@@ -38,6 +40,7 @@ it("allows header chaining", async () => {
 it("makes a request with the provided body and marks it as application/json", async() => {
     window.fetch.mockResolvedValueOnce({
         ok: true,
+        bodyUsed: true,
         json: () => Promise.resolve({ some: "thing" })
     })
 
@@ -71,6 +74,18 @@ it("throws an error with the status and status text when the request fails", asy
     expect(error).toStrictEqual({ status: 400, statusText: "Nahaan" })
 })
 
+it("returns undefined if body is not used on the response", async() => {
+    window.fetch.mockResolvedValueOnce({
+        ok: true,
+        bodyUsed: false
+    })
+
+    const response = await request.get("hey").send()
+
+    expect(window.fetch).toBeCalledWith("hey", { method: "GET" })
+    expect(response).toBeUndefined()
+})
+
 describe("supported methods", () => {
     it.each([
         ["get", "GET"],
@@ -80,6 +95,7 @@ describe("supported methods", () => {
     ])("allows sending a %s request", async(methodFunction, expectedMethodHeader) => {
         window.fetch.mockResolvedValueOnce({
             ok: true,
+            bodyUsed: true,
             json: () => Promise.resolve({ some: "thing" })
         })
 
